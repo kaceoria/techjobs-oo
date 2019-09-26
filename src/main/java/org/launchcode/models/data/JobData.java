@@ -1,8 +1,10 @@
 package org.launchcode.models.data;
 
+import javafx.geometry.Pos;
 import org.launchcode.models.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by LaunchCode
@@ -19,6 +21,7 @@ public class JobData {
 
 
     private JobData() {
+
         JobDataImporter.loadData(this);
     }
 
@@ -40,6 +43,7 @@ public class JobData {
     }
 
     public ArrayList<Job> findAll() {
+
         return jobs;
     }
 
