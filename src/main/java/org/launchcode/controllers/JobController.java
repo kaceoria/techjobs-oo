@@ -1,7 +1,6 @@
-
 package org.launchcode.controllers;
 
-import org.launchcode.models.Job;
+import org.launchcode.models.*;
 import org.launchcode.models.forms.JobForm;
 import org.launchcode.models.data.JobData;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,6 @@ public class JobController {
 
         // TODO #1 - get the Job with the given ID and pass it into the view
         model.addAttribute("job", jobData.findById(id));
-
-
         return "job-detail";
     }
 
@@ -40,27 +37,28 @@ public class JobController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String add(Model model, @Valid JobForm jobForm, Errors errors) {
-        model.addAttribute("jobs", jobForm);
+
         if(errors.hasErrors()){
-            return "add";
+
+            return "new-job";
         }
 
-        Job newJob = new Job(
-                jobForm.getName(),
-                jobData.getEmployers().findById(jobForm.getEmployerId()),
-                jobData.getLocations().findById(jobForm.getLocationId()),
-                jobData.getPositionTypes().findById(jobForm.getPositionTypeId()),
-                jobData.getCoreCompetencies().findById(jobForm.getCoreCompetenciesId())
-        );
-        /*
-        String aName,
-        Employer aEmployer,
-        Location aLocation,
-        PositionType aPositionType,
-        CoreCompetency aSkill
-         */
+        String aName = jobForm.getName();
+
+        Employer aEmployer = jobData.getEmployers().findById(jobForm.getEmployerId());
+
+        Location aLocation =jobData.getLocations().findById(jobForm.getLocationId());
+
+        PositionType aPositionType = jobData.getPositionTypes().findById(jobForm.getPositionTypeId());
+
+        CoreCompetency aSkill = jobData.getCoreCompetencies().findById(jobForm.getCoreCompetenciesId());
+
+        Job newJob = new Job(aName, aEmployer, aLocation, aPositionType, aSkill);
 
         jobData.add(newJob);
+
+        model.addAttribute("jobs", newJob);
+
 
         return "redirect:/job?id=" + newJob.getId();
 
